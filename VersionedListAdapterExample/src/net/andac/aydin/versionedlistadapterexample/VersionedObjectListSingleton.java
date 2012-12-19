@@ -33,16 +33,16 @@ public class VersionedObjectListSingleton {
 		getIndexpositions().add(VersionedObject.getUniqueId());
 	}
 
-	public AbstractVersionedObject getVersionedObject(long seriesId) {
-		return getVersionedObjectList().get(seriesId);
+	public AbstractVersionedObject getVersionedObject(long uniqueId) {
+		return getVersionedObjectList().get(uniqueId);
 	}
 
 	public Collection<AbstractVersionedObject> values() {
 		return getVersionedObjectList().values();
 	}
 
-	public int getIndexOfVersionedObject(long seriesId) {
-		return getIndexpositions().indexOf(seriesId);
+	public int getIndexOfVersionedObject(long uniqueId) {
+		return getIndexpositions().indexOf(uniqueId);
 	}
 
 	public int size() {
@@ -90,8 +90,8 @@ public class VersionedObjectListSingleton {
 	 * @param VersionedObjectId
 	 * @return
 	 */
-	public boolean increaseVersion(Long seriesId) {
-		AbstractVersionedObject VersionedObject = getVersionedObject(seriesId);
+	public boolean increaseVersion(Long uniqueId) {
+		AbstractVersionedObject VersionedObject = getVersionedObject(uniqueId);
 		long versionNumber = VersionedObject.getVersionNumber();
 		VersionedObject.setVersionNumber(++versionNumber);
 		putVersionedObject(VersionedObject);

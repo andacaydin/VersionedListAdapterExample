@@ -35,7 +35,8 @@ public class ExampleListAdapter extends AbstractVersionedObjectListAdapter {
 		// So, be aware when doing a lot of heavy stuff here.
 		// we simply transfer our object's data to the list item representatives
 		VersionedObjectViewHolder versionedObjectViewHolder = (VersionedObjectViewHolder) viewHolder;
-		ExampleObject exampleObject = (ExampleObject) viewHolder.data;
+		ExampleObject exampleObject = (ExampleObject) VersionedObjectListSingleton
+				.getInstance().getVersionedObject(viewHolder.uniqueId);
 		versionedObjectViewHolder.textView.setText(exampleObject.getSometext());
 
 	}

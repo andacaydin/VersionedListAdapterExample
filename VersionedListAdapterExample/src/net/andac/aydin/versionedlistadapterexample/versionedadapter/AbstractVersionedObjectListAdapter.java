@@ -19,8 +19,8 @@ public abstract class AbstractVersionedObjectListAdapter extends BaseAdapter {
 	 * views. Use a subclass to adapt it for your needs.
 	 */
 	public static class ViewHolder {
-		// back reference to our list object
-		public AbstractVersionedObject data;
+		public long uniqueId;
+		public long versionId;
 	}
 
 	/**
@@ -108,25 +108,29 @@ public abstract class AbstractVersionedObjectListAdapter extends BaseAdapter {
 			convertView = this.inflater.inflate(this.viewId, null);
 			// call the user's implementation
 			holder = createHolder(convertView);
-			holder.data = getItem(position);
+			holder.uniqueId = getItem(position).getUniqueId();
 			// we set the holder as tag
 			convertView.setTag(holder);
 			// call the user's implementation
 			bindHolder(holder);
+			updateHolderVersion(holder);
 		} else {
 			// get holder back...much faster than inflate
 			holder = (ViewHolder) convertView.getTag();
-			if (holder.data.getVersionNumber() < VersionedObjectListSingleton
-					.getInstance()
-					.getVersionedObject(holder.data.getUniqueId())
-					.getVersionNumber()) {
-				holder.data = VersionedObjectListSingleton.getInstance()
-						.getVersionedObject(holder.data.getUniqueId());
+			if (holder.versionId < VersionedObjectListSingleton.getInstance()
+					.getVersionedObject(holder.uniqueId).getVersionNumber()) {
+				// binding, since version is lower in holder!
 				bindHolder(holder);
+				updateHolderVersion(holder);
 			}
 		}
 
 		return convertView;
+	}
+
+	private void updateHolderVersion(ViewHolder holder) {
+		holder.versionId = VersionedObjectListSingleton.getInstance()
+				.getVersionedObject(holder.uniqueId).getVersionNumber();
 	}
 
 	// XXX we tell adapter we have n types, each a VersionedObject!
